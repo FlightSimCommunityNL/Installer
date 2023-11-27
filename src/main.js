@@ -1,26 +1,56 @@
-const { app, BrowserWindow } = require('electron');
-const path = require('path');
+const { app, BrowserWindow, ipcMain, ipcRenderer } = require("electron");
+const MainScreen = require("./mainScreen");
+const { autoUpdater, AppUpdater } = require("electron-updater");
 
-if (require('electron-squirrel-startup')) {
-    app.quit();
+let curWindow;
+
+//Basic flags
+autoUpdater.autoDownload = false;
+autoUpdater.autoInstallOnAppQuit = true;
+
+function createWindow() {
+    curWindow = new MainScreen();
 }
 
-const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 1300,
-        height: 800,
-        webPreferences: {
-            devTools: false
-        }
+app.whenReady().then(() => {
+    createWindow();
+
+    app.on("activate", function () {
+        if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 
-    win.loadFile(path.join(__dirname, 'index.html'));
-};
+    autoUpdater.checkForUpdates();
+    curWindow.showMessage(`Checking for updates. Current version ${app.getVersion()}`);
+});
 
-app.whenReady().then(() => {
-    createWindow()
-})
+/*New Update Available*/
+autoUpdater.on("update-available", (info) => {
+    curWindow.showMessage(`Update available. Current version ${app.getVersion()}`);
+    let pth = autoUpdater.downloadUpdate();
+    curWindow.showMessage(pth);
+});
 
-app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') app.quit()
-})
+autoUpdater.on("update-not-available", (info) => {
+    curWindow.showMessage(`No update available. Current version ${app.getVersion()}`);
+});
+
+/*Download Completion Message*/
+autoUpdater.on("update-downloaded", (info) => {
+    curWindow.showMessage(`Update downloaded. Current version ${app.getVersion()}`);
+});
+
+autoUpdater.on("error", (info) => {
+    curWindow.showMessage(info);
+});
+
+
+
+
+//Global exception handler
+process.on("uncaughtException", function (err) {
+    console.log(err);
+});
+
+app.on("window-all-closed", function () {
+    if (process.platform !== "darwin") app.quit();
+});

@@ -1,20 +1,29 @@
 {
   "name": "FSCNL-Installer",
   "productName": "FSCNL Installer",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Met dit programma kan je makkelijk alle liveries installeren die wij gebruiken",
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "build": "electron-builder"
+    "build": "electron-builder",
+    "dist": "electron-builder"
+  },
+  "repository": "https://github.com/FlightSimCommunityNL/Installer",
+  "publish": {
+    "provider": "github",
+    "releaseType": "release"
   },
   "build": {
-    "appId": "FSCNL Installer",
+    "appId": "nl.fscnl.installer",
     "win": {
       "target": [
         "nsis"
       ],
       "icon": "icon.ico"
+    },
+    "directories": {
+      "output": "dist"
     },
     "nsis": {
       "oneClick": false,
@@ -28,7 +37,8 @@
   "author": "Bas Lepelaar",
   "license": "MIT",
   "dependencies": {
-    "electron-squirrel-startup": "^1.0.0"
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-updater": "^6.1.7"
   },
   "devDependencies": {
     "electron": "^27.1.2",
