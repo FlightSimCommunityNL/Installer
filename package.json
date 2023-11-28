@@ -1,7 +1,7 @@
 {
   "name": "FSCNL-Installer",
   "productName": "FSCNL Installer",
-  "version": "1.0.2",
+  "version": "1.0.1",
   "description": "Met dit programma kan je makkelijk alle liveries installeren die wij gebruiken",
   "main": "src/main.js",
   "scripts": {

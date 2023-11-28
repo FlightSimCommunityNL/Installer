@@ -1,7 +1,7 @@
 const { app, BrowserWindow, ipcMain, globalShortcut } = require("electron");
 const path = require("path");
 
-class MainScreen {
+class UpdateScreen {
     window;
 
     position = {
@@ -21,10 +21,10 @@ class MainScreen {
             icon: 'icon.ico',
             backgroundColor: '#1b2434',
             webPreferences: {
-                devTools: true,
+                devTools: false,
                 nodeIntegration: true,
-                contextIsolation: true,
-                preload: path.join(__dirname, "mainPreload.js"),
+                contextIsolation: false,
+                preload: path.join(__dirname, "updatePreload.js"),
             },
         });
 
@@ -41,7 +41,7 @@ class MainScreen {
         let wc = this.window.webContents;
         wc.openDevTools({ mode: "undocked" });
 
-        this.window.loadFile("./src/index.html");
+        this.window.loadFile("./src/main/index.html");
     }
 
     showMessage(message) {
@@ -64,4 +64,4 @@ class MainScreen {
     }
 }
 
-module.exports = MainScreen;
+module.exports = UpdateScreen;

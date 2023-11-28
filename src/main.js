@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, ipcRenderer } = require("electron");
-const MainScreen = require("./mainScreen");
+const MainScreen = require("./main/mainScreen");
+// const UpdateScreen = require("./update/updateScreen");
 const { autoUpdater, AppUpdater } = require("electron-updater");
 
 let curWindow;
@@ -12,6 +13,10 @@ function createWindow() {
     curWindow = new MainScreen();
 }
 
+// function createUpdateWindow() {
+//     curWindow = new UpdateScreen();
+// }
+
 app.whenReady().then(() => {
     createWindow();
 
@@ -19,8 +24,7 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow();
     });
 
-    autoUpdater.checkForUpdates();
-    curWindow.showMessage(`Checking for updates. Current version ${app.getVersion()}`);
+    // curWindow.showMessage(`Checking for updates. Current version ${app.getVersion()}`);
 });
 
 /*New Update Available*/
