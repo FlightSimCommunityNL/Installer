@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, ipcRenderer } = require("electron");
 const MainScreen = require("./main/mainScreen");
 // const UpdateScreen = require("./update/updateScreen");
 const { autoUpdater, AppUpdater } = require("electron-updater");
+const path = require("path");
 
 let curWindow;
 
@@ -9,9 +10,30 @@ let curWindow;
 autoUpdater.autoDownload = false;
 autoUpdater.autoInstallOnAppQuit = true;
 
-function createWindow() {
-    curWindow = new MainScreen();
+const createWindow = () => {
+    const win = new BrowserWindow({
+        width: 1280,
+        height: 800,
+        title: "Installer",
+        show: true,
+        removeMenu: true,
+        autoHideMenuBar: true,
+        icon: 'icon.ico',
+        backgroundColor: '#1b2434',
+        webPreferences: {
+            devTools: false,
+            nodeIntegration: true,
+            contextIsolation: false,
+            preload: path.join(__dirname, './main/mainPreload.js')
+        },
+    })
+
+    win.loadFile('./src/main/index.html')
 }
+
+// function createWindow() {
+//     curWindow = new MainScreen();
+// }
 
 // function createUpdateWindow() {
 //     curWindow = new UpdateScreen();
@@ -20,11 +42,11 @@ function createWindow() {
 app.whenReady().then(() => {
     createWindow();
 
-    app.on("activate", function () {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow();
-    });
-
-    // curWindow.showMessage(`Checking for updates. Current version ${app.getVersion()}`);
+    app.on('activate', () => {
+        if (BrowserWindow.getAllWindows().length === 0) {
+            createWindow()
+        }
+    })
 });
 
 /*New Update Available*/
